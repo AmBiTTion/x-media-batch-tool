@@ -1,12 +1,26 @@
-# X 批量保存与媒体下载
+# X Media Batch Tool｜推特/X 图片视频批量下载工具
 
 **简体中文** · [English](README.md)
 
-在 X / Twitter 网页中下载单帖媒体、整理批量下载任务。提供 **Chrome Manifest V3 扩展**和**油猴脚本**两种形式。当前程序界面为简体中文，说明文档提供中英文版本。
+**X Media Batch Tool** 是开源的推特/X 图片视频下载工具，支持每帖下载按钮和批量下载队列。可保存 X 提供的原图尺寸图片、最高可用 MP4 视频，重试失败文件、跳过重复，并导出帖子正文与链接。提供 **Chrome Manifest V3 扩展**与 **Tampermonkey 油猴脚本**，内置**简体中文和 English 界面**。
 
-**当前版本：v1.2.0** · [下载发布版](https://github.com/AmBiTTion/x-media-batch-tool/releases/latest) · [安装油猴脚本](https://github.com/AmBiTTion/x-media-batch-tool/raw/refs/heads/main/userscript/x-batch-tool.user.js)
+**当前版本：v1.3.0** · [下载发布版](https://github.com/AmBiTTion/x-media-batch-tool/releases/latest) · [安装油猴脚本](https://github.com/AmBiTTion/x-media-batch-tool/raw/refs/heads/main/userscript/x-batch-tool.user.js) · [安装教程](docs/INSTALL.zh-CN.md) · [常见问题](docs/FAQ.zh-CN.md)
 
-![模拟帖子上的单帖下载菜单](docs/images/post-menu.png)
+![模拟帖子上的中文单帖下载菜单](docs/images/post-menu-zh-CN.png)
+
+## 项目速览
+
+| 问题 | v1.3.0 的实际情况 |
+| --- | --- |
+| 能做什么？ | 单帖下载，或批量保存 X/Twitter 网页已加载帖子的媒体。 |
+| 适合谁？ | 希望在本机保存媒体、导出正文和链接的桌面网页用户。 |
+| 如何安装？ | 加载 Chrome 扩展文件夹，或安装油猴脚本；不需要服务器或 API Key。 |
+| 支持什么语言？ | 简体中文和 English，首次跟随浏览器，可手动切换并保存。 |
+| 下载什么画质？ | X 提供的 `orig` 尺寸图片，以及已加载响应中的最高码率可用 MP4。 |
+| 数据存在哪里？ | 本机浏览器；无统计上报或第三方解析服务。 |
+| 有哪些限制？ | 不含整账号归档；安卓实机兼容和登录账号真实媒体下载仍未验证。 |
+
+[观看中文安装与使用演示](https://github.com/AmBiTTion/x-media-batch-tool/releases/download/v1.3.0/x-media-batch-tool-zh-CN-v1.3.0.webm)：先展示安装步骤说明，再在模拟网页中操作真实控件，并验证生成 PNG 的浏览器下载；不是实测真实 X 账号视频。
 
 ## 功能
 
@@ -16,10 +30,11 @@
 - 顺序下载队列、逐帖进度、每个失败文件自动重试一次、去重跳过、手动重试和停止。
 - 可选 TXT 正文、文件名预设、下载间隔、深浅主题，以及默认收起的响应式面板。
 - 帖子、设置、去重历史和任务保存在本机；刷新后未完成的任务标为中断，由用户手动重试。
+- 中英文即时切换并保存选择，不中断正在执行的队列；提供可关闭的首次使用引导。
 
 ## Chrome 电脑版安装
 
-1. 从 [Releases](https://github.com/AmBiTTion/x-media-batch-tool/releases/latest) 下载 `x-media-batch-tool-chrome-v1.2.0.zip` 并解压，或克隆/下载本仓库。
+1. 从 [Releases](https://github.com/AmBiTTion/x-media-batch-tool/releases/latest) 下载 `x-media-batch-tool-chrome-v1.3.0.zip` 并解压，或克隆/下载本仓库。
 2. Chrome 地址栏打开 `chrome://extensions/`，开启“开发者模式”。
 3. 点击“加载已解压的扩展程序”，选择**包含 `manifest.json` 的 `extension` 文件夹**。
 4. 刷新 X 网页。每个已加载帖子底部出现下载入口；右下角入口打开批量面板。
@@ -38,6 +53,8 @@
 
 ## 使用
 
+语言设置位于 **设置 → 界面语言**，提供跟随浏览器、简体中文、English。英文界面中对应 **Settings → Interface language**。非中文浏览器默认使用英语，手动选择会在刷新后保留，不改变 X 网页自身的语言。
+
 | 入口 | 操作 |
 | --- | --- |
 | 下载 | 直接把这一帖的媒体加入队列 |
@@ -53,7 +70,7 @@
 
 文件保存在浏览器下载目录，“每次询问保存位置”和多文件下载权限由浏览器设置决定。油猴版正文及导出操作会说明“已发起保存”，不冒充已核实文件完成；Chrome 扩展的队列媒体/TXT 下载依据浏览器完成事件记账。
 
-![模拟帖子上的批量面板](docs/images/panel.png)
+![模拟帖子上的中文批量面板](docs/images/panel-zh-CN.png)
 
 ## 边界与排错
 
@@ -62,7 +79,19 @@
 - 仅 HLS、直播、不可用/受限/已删除内容和 X 页面变化可能导致下载失败。未解析的视频会报错，不会把封面当作视频。
 - 收集范围是网页实际加载的内容，未展开长正文、引用帖、混合媒体或 DOM 变化可能导致信息不完整，请核对重要记录。
 - 工具报告超时后，Chrome 可能仍继续下载，重试前请检查下载列表。去重历史无法感知你之后删除了本地文件。
-- **v1.2.0 尚未实现整账号归档、账号资料导出，以及原创/回复/转发/引用帖的专用分类筛选。**
+- **v1.3.0 尚未实现整账号归档、账号资料导出，以及原创/回复/转发/引用帖的专用分类筛选。**
+
+## 常见问题摘要
+
+**能批量下载推特视频和图片吗？** 可以收集已加载帖子、勾选并加入媒体队列；范围是当前可访问、实际加载的内容，不等于该账号全部历史。
+
+**这是 Chrome 插件还是油猴脚本？** 两种形式都提供，只需启用一种，详见[中文安装教程](docs/INSTALL.zh-CN.md)。
+
+**安卓 Chrome 能用吗？** 需要按具体浏览器及油猴版本验证；窄屏界面截图不能证明手机上能注入和下载。
+
+**需要第三方解析网站或服务器吗？** 不需要。工具读取 X 已加载响应，从其媒体域名保存文件，详见隐私与权限说明。
+
+更多解答：[画质、去重、视频失败与数据保存](docs/FAQ.zh-CN.md)。
 
 ## 隐私与权限
 
@@ -84,7 +113,9 @@ npm run test:browser
 
 主要源码位于 `userscript/x-batch-tool.user.js`；`scripts/build.cjs` 从中生成扩展的 `content.js`、`capture.js` 和 `manifest.json`，后台下载源文件为 `src/extension-background.js`。仓库保留生成后的 `extension` 便于直接安装，修改后发布前请重新构建。
 
-测试覆盖原图 URL、视频码率、CSV 转义与公式防护、下载来源校验、严格 Trusted Types 下的启动、扩展响应桥接、真实 JSON 文件导出、设置保存、每帖控件、卡片复用、窄屏布局、去重和强制下载，以及部分失败后的补下载。帖子数据和下载完成回报为模拟数据，**尚未在真实登录的 X 账号完成媒体下载端到端验证，也未完成安卓实机验证**。测试浏览器数据和生成截图不会提交到 Git。
+测试覆盖原图 URL、视频码率、CSV 转义与公式防护、下载来源校验、严格 Trusted Types 下的启动、扩展响应桥接、真实 JSON 文件导出、设置保存、每帖控件、卡片复用、窄屏布局、去重和强制下载，以及部分失败后的补下载。新增语言检测、手动选择保存、下载中即时切换、首次引导及任务/选择保留测试。帖子数据和队列回报为模拟数据，演示另外验证了浏览器保存本机生成 PNG。**尚未在真实登录的 X 账号完成媒体下载端到端验证，也未完成安卓实机验证**。测试浏览器数据和自动测试产物不会提交到 Git。
+
+翻译字典位于 `src/i18n/en.json`，构建时嵌入独立油猴脚本，也会生成 Chrome 扩展名称和简介的语言包。安装 Playwright Chromium 后执行 `node scripts/create-demo.cjs` 可重新生成双语安装步骤图、界面截图和演示；视频生成在忽略提交的 `dist/demo/`，供上传 Release 使用。
 
 ## 参考与许可
 

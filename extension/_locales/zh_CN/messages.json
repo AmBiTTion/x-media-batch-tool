@@ -1,0 +1,8 @@
+{
+  "extensionName": {
+    "message": "X Media Batch Tool｜推特/X 图片视频批量下载工具"
+  },
+  "extensionDescription": {
+    "message": "推特/X 图片视频批量下载工具。支持每帖下载、队列、重试、去重、JSON/CSV导出及中英文界面。"
+  }
+}

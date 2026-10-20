@@ -3,6 +3,11 @@ const path = require('path');
 const dir = path.resolve('extension');
 fs.mkdirSync(dir, { recursive: true });
 let source = fs.readFileSync('userscript/x-batch-tool.user.js', 'utf8');
+const version=JSON.parse(fs.readFileSync('package.json','utf8')).version;
+const translations=JSON.parse(fs.readFileSync('src/i18n/en.json','utf8'));
+source=source.replace(/  const EN=.*;\r?\n/,'  const EN='+JSON.stringify(translations)+';\n');
+source=source.replace(/(^\/\/ @version\s+)\S+/m,'$1'+version);
+fs.writeFileSync('userscript/x-batch-tool.user.js',source);
 const hookStart = source.indexOf('  // Only inspect responses');
 const hookEnd = source.indexOf('\n  function scan()', hookStart);
 const helpers = source.slice(source.indexOf('  function original('), hookStart);
@@ -57,8 +62,8 @@ ${source}
 }).catch(e => console.error('[X Batch] 初始化失败', e));`;
 fs.writeFileSync(path.join(dir, 'content.js'), wrapper);
 fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify({
-  manifest_version:3, name:'X 批量保存与媒体下载', version:'1.2.0', minimum_chrome_version:'111',
-  description:'批量整理X帖子、导出正文链接、下载原图及最高可用MP4。所有记录保存在本地。',
+  manifest_version:3, name:'__MSG_extensionName__', version, minimum_chrome_version:'111', default_locale:'en',
+  description:'__MSG_extensionDescription__',
   permissions:['storage','downloads'],
   background:{service_worker:'background.js'},
   content_scripts:[
@@ -67,4 +72,10 @@ fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify({
   ]
 }, null,2));
 fs.copyFileSync('src/extension-background.js', path.join(dir,'background.js'));
+for(const [locale,messages]of Object.entries({
+  en:{extensionName:{message:'X Media Batch Tool — X/Twitter Image & Video Downloader'},extensionDescription:{message:'Download X/Twitter images and MP4 videos. Per-post buttons, batch queues, retries, exports. English and 简体中文.'}},
+  zh_CN:{extensionName:{message:'X Media Batch Tool｜推特/X 图片视频批量下载工具'},extensionDescription:{message:'推特/X 图片视频批量下载工具。支持每帖下载、队列、重试、去重、JSON/CSV导出及中英文界面。'}}
+})){
+  const target=path.join(dir,'_locales',locale);fs.mkdirSync(target,{recursive:true});fs.writeFileSync(path.join(target,'messages.json'),JSON.stringify(messages,null,2)+'\n');
+}
 console.log(dir);

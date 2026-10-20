@@ -9,7 +9,7 @@ async function routes(context){
 (async()=>{
  fs.mkdirSync('tests/artifacts',{recursive:true});
  const extension=path.resolve('extension');
- const ext=await chromium.launchPersistentContext(path.resolve('tests/.profiles/v2'),{headless:true,channel:'chromium',acceptDownloads:true,args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`]});
+ const ext=await chromium.launchPersistentContext(path.resolve('tests/.profiles/v2'),{headless:true,channel:'chromium',locale:'zh-CN',acceptDownloads:true,args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`]});
  try{
    const worker=ext.serviceWorkers()[0]||await ext.waitForEvent('serviceworker');await worker.evaluate(()=>chrome.storage.local.clear());
    await routes(ext);const page=await ext.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -44,7 +44,7 @@ async function routes(context){
  }finally{await ext.close()}
  const browser=await chromium.launch({headless:true});
  try{
-   const ctx=await browser.newContext({acceptDownloads:true});await routes(ctx);
+   const ctx=await browser.newContext({acceptDownloads:true,locale:'zh-CN'});await routes(ctx);
    await ctx.addInitScript({content:`
     const GM_getValue=(key,fallback)=>JSON.parse(localStorage.getItem(key)||'null')||fallback;
     const GM_setValue=(key,value)=>localStorage.setItem(key,JSON.stringify(value));
