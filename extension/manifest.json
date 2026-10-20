@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "X 批量保存与媒体下载",
+  "version": "1.2.0",
+  "minimum_chrome_version": "111",
+  "description": "批量整理X帖子、导出正文链接、下载原图及最高可用MP4。所有记录保存在本地。",
+  "permissions": [
+    "storage",
+    "downloads"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "capture.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "world": "ISOLATED"
+    }
+  ]
+}
